@@ -1,0 +1,430 @@
+/* ============================================================
+   CALC — Premium Calculator  |  style.css
+   Dark glassmorphism + neon blue-purple, custom grid
+   ============================================================ */
+
+/* ── 1. CSS Variables ─────────────────────────────────────── */
+:root {
+  /* Palette */
+  --bg-deep:      #08080f;
+  --bg-mid:       #0d0d1a;
+  --glass-bg:     rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.09);
+  --glass-shine:  rgba(255,255,255,0.06);
+
+  --neon-blue:    #4f9eff;
+  --neon-purple:  #9b6bff;
+  --neon-cyan:    #00e5ff;
+  --accent-eq:    linear-gradient(135deg, #4f9eff 0%, #9b6bff 100%);
+  --accent-op:    rgba(79,158,255,0.15);
+  --accent-fn:    rgba(155,107,255,0.12);
+
+  --text-primary: #ffffff;
+  --text-dim:     rgba(255,255,255,0.45);
+  --text-expr:    rgba(255,255,255,0.55);
+
+  /* Typography */
+  --font-display: 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'SF Mono', 'Fira Code', monospace;
+
+  /* Layout */
+  --card-radius:  28px;
+  --btn-radius:   18px;
+  --gap:          10px;
+
+  /* Shadows */
+  --card-shadow:  0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04);
+  --btn-shadow:   0 4px 16px rgba(0,0,0,0.35);
+  --glow-blue:    0 0 32px rgba(79,158,255,0.35);
+  --glow-eq:      0 8px 32px rgba(155,107,255,0.5);
+}
+
+/* ── 2. Reset & Base ──────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  overflow: hidden; /* prevent scroll during interactions */
+}
+
+body {
+  font-family: var(--font-display);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ── 3. Animated Background ───────────────────────────────── */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Glowing orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+  animation: drift 18s ease-in-out infinite alternate;
+}
+.orb-1 {
+  width: 520px; height: 520px;
+  background: radial-gradient(circle, #4f9eff, transparent 70%);
+  top: -120px; left: -80px;
+  animation-duration: 20s;
+}
+.orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, #9b6bff, transparent 70%);
+  bottom: -100px; right: -60px;
+  animation-duration: 14s;
+  animation-delay: -7s;
+}
+.orb-3 {
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, #00e5ff, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  animation-duration: 25s;
+  animation-delay: -4s;
+}
+
+@keyframes drift {
+  from { transform: translate(0,0) scale(1); }
+  to   { transform: translate(40px,30px) scale(1.1); }
+}
+
+/* Particle canvas fills background */
+#particles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.35;
+}
+
+/* ── 4. Layout Wrapper ────────────────────────────────────── */
+.calc-wrapper {
+  position: relative;
+  z-index: 1;
+  padding: 16px;
+  /* Page-load animation */
+  animation: cardEntrance 0.8s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+@keyframes cardEntrance {
+  from { opacity: 0; transform: scale(0.88) translateY(28px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* ── 5. Glassmorphism Card ────────────────────────────────── */
+.calc-card {
+  width: min(360px, 92vw);
+  background: var(--glass-bg);
+  backdrop-filter: blur(36px) saturate(180%);
+  -webkit-backdrop-filter: blur(36px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle top-shine on the glass card */
+.calc-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+}
+/* Inner reflection shimmer */
+.calc-card::after {
+  content: '';
+  position: absolute;
+  top: -60%; left: -30%;
+  width: 60%; height: 100%;
+  background: var(--glass-shine);
+  transform: rotate(-25deg);
+  pointer-events: none;
+  animation: shimmer 8s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%,100% { opacity: 0.3; transform: rotate(-25deg) translateY(0); }
+  50%      { opacity: 0.06; transform: rotate(-25deg) translateY(20px); }
+}
+
+/* ── 6. Header ────────────────────────────────────────────── */
+.calc-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-left: 2px;
+}
+.calc-brand {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.calc-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--neon-blue);
+  box-shadow: 0 0 10px var(--neon-blue);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.6; transform: scale(0.8); }
+}
+
+/* ── 7. Display ───────────────────────────────────────────── */
+.display {
+  position: relative;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  padding: 16px 20px 20px;
+  margin-bottom: 16px;
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+.display.glowing {
+  box-shadow: 0 0 28px rgba(79,158,255,0.22), inset 0 0 28px rgba(79,158,255,0.06);
+}
+
+.display-expression {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-expr);
+  min-height: 20px;
+  margin-bottom: 6px;
+  transition: opacity 0.2s;
+  word-break: break-all;
+  text-align: right;
+  max-width: 100%;
+}
+
+.display-result {
+  font-family: var(--font-mono);
+  font-size: 48px;
+  font-weight: 300;
+  color: var(--text-primary);
+  line-height: 1;
+  word-break: break-all;
+  text-align: right;
+  max-width: 100%;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  /* Fit long numbers */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+.display-result.pop {
+  animation: pop 0.2s cubic-bezier(0.22,1,0.36,1);
+}
+@keyframes pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+.display-result.error {
+  font-size: 22px;
+  color: #ff6b6b;
+  animation: shake 0.4s ease;
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%,60% { transform: translateX(-6px); }
+  40%,80% { transform: translateX(6px); }
+}
+
+/* The glow overlay inside the display */
+.display-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% 80%, rgba(79,158,255,0.12), transparent 70%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.display.glowing .display-glow { opacity: 1; }
+
+/* ── 8. Button Grid ───────────────────────────────────────── */
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: var(--gap);
+}
+
+/* Zero spans 2 columns */
+.btn-zero {
+  grid-column: span 2;
+  justify-content: flex-start;
+  padding-left: 24px !important;
+}
+
+/* ── 9. Button Base ───────────────────────────────────────── */
+.btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+  border: none;
+  border-radius: var(--btn-radius);
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    transform     0.18s cubic-bezier(0.22,1,0.36,1),
+    box-shadow    0.18s ease,
+    background    0.18s ease,
+    border-color  0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+/* Focus ring (keyboard accessibility) */
+.btn:focus-visible {
+  outline: 2px solid var(--neon-blue);
+  outline-offset: 3px;
+}
+
+/* ── Hover lift ── */
+.btn:hover {
+  transform: translateY(-2px) scale(1.03);
+}
+.btn:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+/* ── Ripple ── */
+.btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: rippleAnim 0.5s linear;
+  pointer-events: none;
+  background: rgba(255,255,255,0.18);
+}
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* ── Number buttons ── */
+.btn-num {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.07);
+  color: var(--text-primary);
+  box-shadow: var(--btn-shadow);
+}
+.btn-num:hover {
+  background: rgba(255,255,255,0.13);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.4), 0 0 12px rgba(79,158,255,0.12);
+}
+
+/* ── Function buttons ── */
+.btn-fn {
+  background: var(--accent-fn);
+  border: 1px solid rgba(155,107,255,0.18);
+  color: var(--neon-purple);
+  box-shadow: var(--btn-shadow);
+  font-size: 18px;
+}
+.btn-fn:hover {
+  background: rgba(155,107,255,0.22);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.4), 0 0 16px rgba(155,107,255,0.25);
+  color: #c09bff;
+}
+
+/* ── Operator buttons ── */
+.btn-op {
+  background: var(--accent-op);
+  border: 1px solid rgba(79,158,255,0.2);
+  color: var(--neon-blue);
+  box-shadow: var(--btn-shadow);
+  font-size: 22px;
+  font-weight: 300;
+}
+.btn-op:hover {
+  background: rgba(79,158,255,0.25);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.4), 0 0 18px rgba(79,158,255,0.3);
+  color: #7fb8ff;
+}
+.btn-op.active-op {
+  background: rgba(79,158,255,0.3);
+  border-color: var(--neon-blue);
+  box-shadow: 0 0 0 2px rgba(79,158,255,0.4), 0 6px 22px rgba(0,0,0,0.3);
+  color: #ffffff;
+}
+
+/* ── Equals button ── */
+.btn-eq {
+  background: var(--accent-eq);
+  border: 1px solid transparent;
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 300;
+  box-shadow: var(--glow-eq), var(--btn-shadow);
+}
+.btn-eq:hover {
+  box-shadow: 0 0 36px rgba(155,107,255,0.65), 0 6px 22px rgba(0,0,0,0.4);
+  transform: translateY(-3px) scale(1.04);
+}
+.btn-eq:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+/* ── Keyboard highlight ── */
+.btn.key-pressed {
+  animation: keyFlash 0.18s ease;
+}
+@keyframes keyFlash {
+  0%  { background: rgba(79,158,255,0.5); }
+  100%{ background: inherit; }
+}
+
+/* ── 10. Responsive ───────────────────────────────────────── */
+@media (max-height: 700px) {
+  .btn { height: 58px; }
+  .display { min-height: 90px; }
+  .display-result { font-size: 38px; }
+}
+
+@media (max-width: 360px) {
+  .calc-card { padding: 14px; }
+  .btn { font-size: 18px; height: 62px; }
+  .display-result { font-size: 40px; }
+  :root { --gap: 8px; --btn-radius: 14px; }
+}
+
+/* ── 11. Reduced Motion ───────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

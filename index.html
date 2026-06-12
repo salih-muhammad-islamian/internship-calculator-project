@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CALC — Premium Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated Background -->
+  <div class="bg-layer" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <canvas id="particles"></canvas>
+  </div>
+
+  <!-- Calculator Card -->
+  <main class="calc-wrapper" role="main">
+    <div class="calc-card" id="calcCard">
+
+      <!-- Header -->
+      <header class="calc-header">
+        <span class="calc-brand">CALC</span>
+        <span class="calc-dot"></span>
+      </header>
+
+      <!-- Display -->
+      <section class="display" aria-label="Calculator display">
+        <div class="display-expression" id="expression" aria-live="polite"></div>
+        <div class="display-result"  id="result"     aria-live="assertive">0</div>
+        <div class="display-glow"    id="displayGlow" aria-hidden="true"></div>
+      </section>
+
+      <!-- Buttons -->
+      <div class="btn-grid" role="group" aria-label="Calculator buttons">
+
+        <!-- Row 1 -->
+        <button class="btn btn-fn"   data-action="clear"    aria-label="Clear">C</button>
+        <button class="btn btn-fn"   data-action="sign"     aria-label="Toggle sign">+/−</button>
+        <button class="btn btn-fn"   data-action="percent"  aria-label="Percent">%</button>
+        <button class="btn btn-op"   data-action="operator" data-value="÷" aria-label="Divide">÷</button>
+
+        <!-- Row 2 -->
+        <button class="btn btn-num"  data-action="number"   data-value="7">7</button>
+        <button class="btn btn-num"  data-action="number"   data-value="8">8</button>
+        <button class="btn btn-num"  data-action="number"   data-value="9">9</button>
+        <button class="btn btn-op"   data-action="operator" data-value="×" aria-label="Multiply">×</button>
+
+        <!-- Row 3 -->
+        <button class="btn btn-num"  data-action="number"   data-value="4">4</button>
+        <button class="btn btn-num"  data-action="number"   data-value="5">5</button>
+        <button class="btn btn-num"  data-action="number"   data-value="6">6</button>
+        <button class="btn btn-op"   data-action="operator" data-value="−" aria-label="Subtract">−</button>
+
+        <!-- Row 4 -->
+        <button class="btn btn-num"  data-action="number"   data-value="1">1</button>
+        <button class="btn btn-num"  data-action="number"   data-value="2">2</button>
+        <button class="btn btn-num"  data-action="number"   data-value="3">3</button>
+        <button class="btn btn-op"   data-action="operator" data-value="+" aria-label="Add">+</button>
+
+        <!-- Row 5 -->
+        <button class="btn btn-num btn-zero" data-action="number"   data-value="0">0</button>
+        <button class="btn btn-num"          data-action="decimal"  aria-label="Decimal">.</button>
+        <button class="btn btn-fn"           data-action="delete"   aria-label="Delete">⌫</button>
+        <button class="btn btn-eq"           data-action="equals"   aria-label="Equals">=</button>
+
+      </div><!-- /btn-grid -->
+    </div><!-- /calc-card -->
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
